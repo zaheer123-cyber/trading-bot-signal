@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - APP_ENV=development
+      - DATABASE_URL=sqlite:///./trading.db
+      - INITIAL_BALANCE=1000
+      - TRADE_AMOUNT=10
+      - PAYOUT=0.80
+      - SIGNAL_THRESHOLD=70
+      - MAX_DAILY_LOSS=50
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
