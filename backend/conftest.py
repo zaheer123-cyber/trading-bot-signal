@@ -1,0 +1,4 @@
+import sys
+import os
+# Make the app importable from tests by adding the backend directory to the path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

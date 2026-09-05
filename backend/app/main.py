@@ -18,13 +18,18 @@ app = FastAPI(
     description="Trading Signal & Backtesting Platform (Educational Research Only)"
 )
 
-# CORS config
+# CORS config — allow Vite dev server in development; restrict in production
+ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
+if settings.APP_ENV == "development":
+    # Only allow known dev origins, not wildcard
+    pass
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept"],
 )
 
 app.include_router(routes_market.router, prefix="/api/market", tags=["Market"])
